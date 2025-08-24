@@ -21,7 +21,7 @@ header {
   right: 0;
   height: var(--header-h);
   display: grid;
-  grid-template-columns: auto 1fr auto; /* left | center | right */
+  grid-template-columns: auto 1fr auto auto; /* left | search | sync | profile */
   align-items: center;
   gap: 16px;
   padding: 0 20px;
@@ -37,21 +37,21 @@ header {
 }
 
 #menuBtn {
-  padding: 8px 12px;
-  font-size: 16px;
-  border: none;
+  padding: 8px 20px;         
+  font-size: 20px;           
+  border: none;              
   border-radius: 6px;
-  background: #4CAF50;
-  color: white;
+  background: #fff;          
+  color: #000;               
   cursor: pointer;
   transition: background 0.3s;
 }
-#menuBtn:hover { background: #45a049; }
+#menuBtn:hover { background: #f0f0f0; }
 
 .image-box {
   width: 50px;
   height: 50px;
-  background: orange;
+  background: #d09a82;  
   border-radius: 8px;
 }
 
@@ -74,14 +74,28 @@ header {
   background: #fff;
 }
 
-/* Perfectly aligned top-right profile circle */
+/* Sync button (new) */
+.sync-btn {
+  padding: 8px 18px;
+  font-size: 16px;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 20px; /* oblong shape */
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.sync-btn:hover {
+  background: #f0f0f0;
+}
+
+/* Profile circle */
 .profile-circle {
   width: 45px;
   height: 45px;
   border-radius: 50%;
   background: #bbb;
   border: 2px solid #888;
-  justify-self: end;       /* stick to the far right */
+  justify-self: end;
 }
 
 /* SIDEBAR */
@@ -90,8 +104,9 @@ header {
   top: var(--header-h);
   left: 0;
   height: calc(100vh - var(--header-h));
-  background: #222;
-  color: #fff;
+  background: #fff;        
+  color: #000;             
+  border-right: 1px solid #ccc; 
   transition: width 0.3s;
   overflow: hidden;
   z-index: 900;
@@ -116,13 +131,14 @@ nav {
   padding: 8px;
   border-radius: 6px;
   transition: background 0.2s;
+  color: #000;             
 }
-.menu-item:hover { background: #444; }
+.menu-item:hover { background: #f0f0f0; }
 
 .menu-icon {
   width: 40px;
   height: 40px;
-  background: #fff;
+  background: #d09a82;     
   border-radius: 50%;
 }
 
@@ -131,4 +147,3 @@ nav {
 /* Collapsed: show icons only */
 #sidebar.collapsed .menu-title { display: none; }
 #sidebar.collapsed nav { align-items: center; }
-
