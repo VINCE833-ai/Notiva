@@ -1,0 +1,134 @@
+:root {
+  --header-h: 64px;
+  --sidebar-w: 220px;
+  --sidebar-w-collapsed: 70px;
+}
+
+/* Base */
+* { box-sizing: border-box; }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* left | center | right */
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  background: #f3f4f6;
+  border-bottom: 4px solid #333; /* bold separator line */
+  z-index: 1000;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#menuBtn {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#menuBtn:hover { background: #45a049; }
+
+.image-box {
+  width: 50px;
+  height: 50px;
+  background: orange;
+  border-radius: 8px;
+}
+
+.logo-text {
+  font-family: 'Merienda', cursive;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Search centered in the middle column */
+.search-bar {
+  justify-self: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 10px 15px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* Perfectly aligned top-right profile circle */
+.profile-circle {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #bbb;
+  border: 2px solid #888;
+  justify-self: end;       /* stick to the far right */
+}
+
+/* SIDEBAR */
+#sidebar {
+  position: fixed;
+  top: var(--header-h);
+  left: 0;
+  height: calc(100vh - var(--header-h));
+  background: #222;
+  color: #fff;
+  transition: width 0.3s;
+  overflow: hidden;
+  z-index: 900;
+}
+
+#sidebar.expanded { width: var(--sidebar-w); }
+#sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+
+/* Menu */
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 16px 10px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.menu-item:hover { background: #444; }
+
+.menu-icon {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.menu-title { font-size: 16px; }
+
+/* Collapsed: show icons only */
+#sidebar.collapsed .menu-title { display: none; }
+#sidebar.collapsed nav { align-items: center; }
+
