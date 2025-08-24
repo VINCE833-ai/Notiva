@@ -70,7 +70,7 @@ header {
   padding: 10px 15px;
   font-size: 18px;
   border: 2px solid #ccc;
-  border-radius: 8px;
+  border-radius: 30px; /* more rounded */
   background: #fff;
 }
 
@@ -138,8 +138,16 @@ nav {
 .menu-icon {
   width: 40px;
   height: 40px;
-  background: #d09a82;     
+  background: #fff;       /* default white */
   border-radius: 50%;
+  border: 2px solid #ccc;
+  transition: background 0.3s;
+}
+
+/* Active state */
+.menu-item.active .menu-icon {
+  background: #ffde59;
+  border-color: #ffde59;
 }
 
 .menu-title { font-size: 16px; }
@@ -147,3 +155,103 @@ nav {
 /* Collapsed: show icons only */
 #sidebar.collapsed .menu-title { display: none; }
 #sidebar.collapsed nav { align-items: center; }
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.modal.hidden {
+  display: flex;
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 14px;
+  padding: 25px;
+  width: 600px;   /* bigger */
+  max-width: 95%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+}
+
+.modal-header {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.note-title {
+  margin-top: 40px; /* push below header */
+  padding: 10px 15px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 25px; /* rounded like search bar */
+  width: 100%;
+}
+
+.note-text {
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 12px; /* rounder corners */
+  width: 100%;
+  min-height: 220px;
+  resize: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.save-btn {
+  background: #4caf50;
+  color: #fff;
+}
+.save-btn:hover { background: #45a049; }

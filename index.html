@@ -30,7 +30,7 @@
         <div class="menu-icon"></div>
         <span class="menu-title">Notes List</span>
       </div>
-      <div class="menu-item">
+      <div class="menu-item" id="newNoteBtn">
         <div class="menu-icon"></div>
         <span class="menu-title">New Note</span>
       </div>
@@ -44,6 +44,20 @@
       </div>
     </nav>
   </aside>
+
+  <!-- Modal for New Note -->
+  <div id="noteModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="modal-header">Note Editor</span>
+      <button class="close-btn">&times;</button>
+      <input type="text" class="note-title" placeholder="Enter title..." />
+      <textarea class="note-text" placeholder="Write your note here..."></textarea>
+      <div class="modal-actions">
+        <button class="cancel-btn">Cancel</button>
+        <button class="save-btn">Save</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
