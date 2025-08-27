@@ -1,33 +1,28 @@
-:root {
-  --header-h: 64px;
-  --sidebar-w: 220px;
-  --sidebar-w-collapsed: 70px;
-}
-
-/* Base */
-* { box-sizing: border-box; }
-body {
-  font-family: Arial, sans-serif;
+/* General Reset */
+* {
   margin: 0;
   padding: 0;
-  background: #fff;
+  box-sizing: border-box;
 }
 
-/* HEADER */
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ===== Header ===== */
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--header-h);
-  display: grid;
-  grid-template-columns: auto 1fr auto auto; 
+  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 0 20px;
-  background: #f3f4f6;
-  border-bottom: 4px solid #333;
-  z-index: 1000;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  height: 60px;
 }
 
 .header-left {
@@ -37,248 +32,204 @@ header {
 }
 
 #menuBtn {
-  padding: 8px 20px;
-  font-size: 20px;
+  background: white;
   border: none;
-  border-radius: 6px;
-  background: #fff;
-  color: #000;
+  font-size: 20px;
   cursor: pointer;
-  transition: background 0.3s;
 }
-#menuBtn:hover { background: #f0f0f0; }
 
 .image-box {
-  width: 50px;
-  height: 50px;
-  background: #d09a82;
-  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #333;
 }
 
 .logo-text {
   font-family: 'Merienda', cursive;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-size: 20px;
 }
 
 .search-bar {
-  justify-self: center;
-  width: 100%;
-  max-width: 600px;
-  padding: 10px 15px;
-  font-size: 18px;
-  border: 2px solid #ccc;
-  border-radius: 30px;
-  background: #fff;
+  flex: 1;
+  margin: 0 15px;
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
 }
 
 .sync-btn {
-  padding: 8px 18px;
-  font-size: 16px;
-  background: #fff;
-  border: 2px solid #ccc;
-  border-radius: 20px;
+  padding: 6px 18px;
+  background: white;
+  border: 1px solid #bbb;
+  border-radius: 25px;
   cursor: pointer;
-  transition: background 0.2s;
+  margin-right: 15px;
 }
-.sync-btn:hover { background: #f0f0f0; }
 
 .profile-circle {
-  width: 45px;
-  height: 45px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  background: #bbb;
-  border: 2px solid #888;
-  justify-self: end;
+  background: #333;
 }
 
-/* SIDEBAR */
-#sidebar {
-  position: fixed;
-  top: var(--header-h);
-  left: 0;
-  height: calc(100vh - var(--header-h));
-  background: #fff;
-  color: #000;
+/* ===== Sidebar ===== */
+aside {
+  width: 220px;
+  background: white;
   border-right: 1px solid #ccc;
-  transition: width 0.3s;
-  overflow: hidden;
-  z-index: 900;
-}
-
-#sidebar.expanded { width: var(--sidebar-w); }
-#sidebar.collapsed { width: var(--sidebar-w-collapsed); }
-
-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 16px 10px;
+  padding-top: 15px;
+  height: calc(100vh - 60px);
+  position: fixed;
+  top: 60px;
+  left: 0;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  padding: 12px 15px;
   cursor: pointer;
-  padding: 8px;
-  border-radius: 6px;
-  transition: background 0.2s;
-  color: #000;
 }
-.menu-item:hover { background: #f0f0f0; }
+
+.menu-item:hover {
+  background: #f0f0f0;
+}
+
+.menu-item.active {
+  background: #e0e0e0;
+}
 
 .menu-icon {
-  width: 40px;
-  height: 40px;
-  background: #fff;
+  width: 20px;
+  height: 20px;
+  background: #666;
   border-radius: 50%;
-  border: 2px solid #ccc;
-  transition: background 0.3s;
 }
 
-.menu-item.active .menu-icon {
-  background: #ffde59;
-  border-color: #ffde59;
+.menu-title {
+  font-size: 15px;
 }
 
-.menu-title { font-size: 16px; }
-#sidebar.collapsed .menu-title { display: none; }
-#sidebar.collapsed nav { align-items: center; }
-
-/* NOTES CONTAINER */
-#notesContainer {
-  margin-left: var(--sidebar-w);
-  margin-top: var(--header-h);
+/* ===== Main Content ===== */
+main {
+  margin-left: 220px;
   padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notes-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  gap: 15px;
 }
 
+/* Note Cards */
 .note-card {
   background: #fff;
-  border: 2px solid #ddd;
+  border: 1px solid #ddd;
+  padding: 15px;
   border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-  transition: transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  word-wrap: break-word;      /* breaks long words */
+  overflow-wrap: break-word;  /* modern word breaking */
 }
-.note-card:hover { transform: scale(1.02); }
-.note-card h3 {
-  margin: 0 0 10px;
-  font-size: 18px;
-  color: #333;
-}
+
+.note-card h3,
 .note-card p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap; /* keeps line breaks */
 }
 
-.note-card button {
-  margin-top: 10px;
-  margin-right: 5px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
+/* Optional: limit note height */
+.note-card p {
+  max-height: 150px;
+  overflow-y: auto;
 }
 
-.note-card .edit-btn {
-  background: #2196f3;
-  color: white;
-}
-.note-card .edit-btn:hover { background: #1976d2; }
-
-.note-card .delete-btn {
-  background: #e53935;
-  color: white;
-}
-.note-card .delete-btn:hover { background: #c62828; }
-
-/* MODAL */
+/* ===== Modal (New Note Editor) ===== */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background: rgba(0,0,0,0.4);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 2000;
-  opacity: 1;
-  transform: scale(1);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  justify-content: center;
+  z-index: 10;
 }
-.modal.hidden {
-  display: flex;
-  opacity: 0;
-  transform: scale(0.9);
-  pointer-events: none;
+
+.hidden {
+  display: none;
 }
+
 .modal-content {
   background: #fff;
-  border-radius: 14px;
-  padding: 25px;
-  width: 600px;
-  max-width: 95%;
+  padding: 20px;
+  border-radius: 15px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  position: relative;
+  gap: 10px;
 }
+
 .modal-header {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-  position: absolute;
-  top: 15px;
-  left: 20px;
+  font-family: 'Merienda', cursive;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
+
 .close-btn {
   position: absolute;
+  right: 10px;
   top: 10px;
-  right: 12px;
-  background: none;
   border: none;
-  font-size: 24px;
+  background: transparent;
+  font-size: 20px;
   cursor: pointer;
 }
-.note-title {
-  margin-top: 40px;
-  padding: 10px 15px;
-  font-size: 18px;
-  border: 2px solid #ccc;
-  border-radius: 25px;
-  width: 100%;
-}
+
+.note-title,
 .note-text {
-  padding: 12px 15px;
-  font-size: 16px;
-  border: 2px solid #ccc;
-  border-radius: 12px;
   width: 100%;
-  min-height: 220px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.note-text {
+  height: 120px;
   resize: none;
 }
+
 .modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 10px;
 }
-.modal-actions button {
-  padding: 8px 16px;
-  border-radius: 8px;
+
+.cancel-btn,
+.save-btn {
+  padding: 6px 14px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
 }
-.cancel-btn { background: #e0e0e0; color: #333; }
-.save-btn { background: #4caf50; color: #fff; }
-.save-btn:hover { background: #45a049; }
+
+.cancel-btn {
+  background: #ddd;
+}
+
+.save-btn {
+  background: #4caf50;
+  color: white;
+}

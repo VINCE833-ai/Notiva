@@ -15,15 +15,22 @@
       <span class="logo-text">Notiva</span>
     </div>
 
-    <input type="text" class="search-bar" placeholder="Search notes..." />
+    <!-- Search bar -->
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="Search notes..." />
+    </div>
+
+    <!-- Sync button -->
     <button class="sync-btn">Sync</button>
+
+    <!-- Profile circle -->
     <div class="profile-circle" title="Profile"></div>
   </header>
 
-  <!-- SIDEBAR -->
+  <!-- SIDEBAR MENU -->
   <aside id="sidebar" class="expanded">
     <nav>
-      <div class="menu-item">
+      <div class="menu-item active" id="notesListBtn">
         <div class="menu-icon"></div>
         <span class="menu-title">Notes List</span>
       </div>
@@ -31,21 +38,23 @@
         <div class="menu-icon"></div>
         <span class="menu-title">New Note</span>
       </div>
-      <div class="menu-item">
+      <div class="menu-item" id="archiveBtn">
         <div class="menu-icon"></div>
         <span class="menu-title">Archive</span>
       </div>
-      <div class="menu-item">
+      <div class="menu-item" id="trashBtn">
         <div class="menu-icon"></div>
         <span class="menu-title">Trash</span>
       </div>
     </nav>
   </aside>
 
-  <!-- MAIN NOTES -->
-  <main id="notesContainer"></main>
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+    <div id="notesContainer" class="notes-container"></div>
+  </main>
 
-  <!-- MODAL -->
+  <!-- Modal for New Note -->
   <div id="noteModal" class="modal hidden">
     <div class="modal-content">
       <span class="modal-header">Note Editor</span>
