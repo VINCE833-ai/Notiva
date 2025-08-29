@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Notiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f7f8;
+    --panel:#ffffff;
+    --muted:#6b7280;
+    --text:#0b0f19;
+    --border:#e6e7eb;
+    --brand:#d7a08b;
+    --shadow:0 10px 26px rgba(0,0,0,.06);
+    --radius:16px;
+    --pill:#f3f4f6;
+    --focus:#111827;
+    --focusText:#fff;
+    --hint:#facc15;
+  }
+  [data-theme="dark"]{
+    --bg:#0b0f19;
+    --panel:#1f2937;
+    --muted:#9ca3af;
+    --text:#f3f4f6;
+    --border:#374151;
+    --pill:#374151;
+    --focus:#d7a08b;
+    --focusText:#111827;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
+    transition: background .15s ease, color .15s ease;
+  }
+
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    height:64px; display:flex; align-items:center; gap:14px;
+    padding:8px 14px; background:var(--panel); border-bottom:1px solid var(--border);
+  }
+  .burger{
+    width:40px; height:40px; border-radius:10px; display:grid; place-items:center;
+    border:1px solid var(--border); background:#fff; cursor:pointer; user-select:none;
+  }
+  .brand{display:flex; align-items:center; gap:10px; min-width:165px}
+  .brand-badge{
+    width:36px; height:36px; border-radius:10px; background:var(--brand);
+    display:grid; place-items:center; font-weight:700; box-shadow:var(--shadow);
+  }
+  .brand-name{font-weight:700; letter-spacing:.2px}
+  .search{
+    flex:1; max-width:760px; margin-inline:auto;
+    display:flex; align-items:center; gap:10px;
+    border:1px solid var(--border); background:#f2f3f5; border-radius:999px; padding:10px 14px;
+  }
+  .search input{flex:1; border:none; outline:none; background:transparent; font-size:14px}
+  .right-tools{display:flex; align-items:center; gap:12px}
+  .sync{
+    display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px;
+    border:1px solid var(--border); background:var(--pill); cursor:pointer; user-select:none;
+  }
+
+  .theme-toggle{
+    display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+    border:1px solid var(--border); background:var(--pill); cursor:pointer; user-select:none;
+    font-size:13px;
+  }
+
+  .avatar{
+    width:36px; height:36px; border-radius:50%; overflow:hidden;
+    display:grid; place-items:center; /* not clickable */ pointer-events:none;
+    border:1px solid var(--border);
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover; display:block; border-radius:50%}
+
+  /* ===== App Shell. ===== */
+  .app{display:grid; grid-template-columns:260px 1fr; height:calc(100% - 64px)}
+  .sidebar{
+    background:var(--panel); border-right:1px solid var(--border); padding:16px 10px;
+  }
+  .nav{display:flex; flex-direction:column; gap:6px; position:sticky; top:80px}
+  .nav-btn{
+    display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:14px;
+    cursor:pointer; user-select:none; color:var(--text);
+  }
+  .nav-btn:hover{background:#f6f7f9}
+  .nav-btn.active{background:var(--focus); color:var(--focusText)}
+  .ico-badge{
+    width:26px; height:26px; border: radius 50px%; display:grid; place-items:center;
+    border:1px solid var(--border); background:#fff;
+  }
+  .ico-yellow{background:#fff7cc; border-color:#ffe38a}
+  .main{padding:22px 26px; overflow:auto}
+
+  /* ===== Empty  ===== */
+  .empty{
+    height:calc(100% - 44px); display:grid; place-items:center; color:var(--muted); text-align:center;
+  }
+  .empty .light{font-size:56px; opacity:.35}
+  .empty p{margin-top:8px}
+
+  .grid{display:grid; grid-template-columns:repeat(3,minmax(260px,1fr)); gap:18px}
+  @media (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(260px,1fr))}}
+  @media (max-width:760px){
+    .app{grid-template-columns:1fr}
+    .sidebar{display:none}
+    .grid{grid-template-columns:1fr}
+  }
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:16px;
+    padding:14px; box-shadow:var(--shadow); position:relative;
+  }
+  .card h4{margin:0 0 8px 0; font-size:15px}
+  .card p {
+  margin: 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;      /* ✅ Break long words */
+  overflow-wrap: anywhere;    /* ✅ Ensure no overlap */
+}
+
+  .actions{position:absolute; right:8px; top:8px; display:flex; gap:6px}
+  .icon-btn{
+    width:30px; height:30px; display:grid; place-items:center;
+    border-radius:8px; border:1px solid var(--border); background:#fff; cursor:pointer;
+  }
+  .icon-btn:hover{background:#f3f4f6}
+  .pinned{outline:2px solid var(--hint)}
+
+  /* ===== Modal ===== */
+  .modal-wrap{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:40; background:rgba(17,24,39,.45)}
+  .modal{width:min(680px,92vw); background:#fff; border-radius:14px; border:1px solid var(--border); box-shadow:var(--shadow)}
+  .modal header{padding:14px 16px; border-bottom:1px solid var(--border); font-weight:600; display:flex; justify-content:space-between; align-items:center}
+  .modal .body{padding:14px 16px}
+  .modal input,.modal textarea{width:100%; border:1px solid var(--border); border-radius:10px; padding:10px 12px; outline:none; font-size:14px; background:#fafafa}
+  .modal textarea{min-height:180px; resize:vertical}
+  .modal footer{display:flex; justify-content:flex-end; gap:10px; padding:12px 16px; border-top:1px solid var(--border)}
+  .btn{padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:#fff; cursor:pointer}
+  .btn.primary{background:#111827; border-color:#111827; color:#fff}
+  .btn:active{transform:translateY(1px)}
+
+  .snackbar{
+    position:fixed; left:50%; transform:translateX(-50%); bottom:24px; background:#111827; color:#fff;
+    padding:10px 14px; border-radius:10px; display:none; align-items:center; gap:14px; z-index:50; box-shadow:var(--shadow)
+  }
+  .snackbar .undo{color:#facc15; cursor:pointer; font-weight:600}
+
+  .topbar .brand-name{margin-left:2px}
+  .topbar .search span{opacity:.7}
+</style>
+</head>
+<body data-theme="light">
+
+  <div class="topbar">
+    <button id="burgerBtn" class="burger" aria-label="Menu">☰</button>
+
+    <div class="brand">
+      <div class="brand-badge">✒️</div>
+      <div class="brand-name">Notiva</div>
+    </div>
+
+    <div class="search">
+      <span>🔎</span>
+      <input id="searchInput" type="text" placeholder="Search" />
+    </div>
+
+    <div class="right-tools">
+      <div id="syncBtn" class="sync"><span>🔄</span><span>Sync</span></div>
+
+      <div id="themeToggle" class="theme-toggle" title="Toggle dark/light mode">🌗 <span id="themeLabel">Dark</span></div>
+
+      <div class="avatar" title="Profile"><img src="Default.jpg" alt="Profile"></div>
+    </div>
+  </div>
+
+  <!-- ===== App Shell ulit. ===== -->
+  <div class="app" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <nav class="nav">
+        <div class="nav-btn active" data-view="notes">
+          <div class="ico-badge ico-yellow">💡</div><div>Notes List</div>
+        </div>
+        <div class="nav-btn" id="newNoteBtn">
+          <div class="ico-badge">✍️</div><div>New Note</div>
+        </div>
+        <div class="nav-btn" data-view="archive">
+          <div class="ico-badge">📦</div><div>Archive</div>
+        </div>
+        <div class="nav-btn" data-view="trash">
+          <div class="ico-badge">🗑️</div><div>Trash</div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <!-- ===== Modal. ===== -->
+  <div id="modalWrap" class="modal-wrap">
+    <div class="modal">
+      <header>
+        <span>Note Editor</span>
+        <button class="icon-btn" id="closeModal" aria-label="Close">✖️</button>
+      </header>
+      <div class="body">
+        <input id="noteTitle" placeholder="Title" />
+        <div style="height:10px"></div>
+        <textarea id="noteBody" placeholder="Start typing..."></textarea>
+      </div>
+      <footer>
+        <button class="btn" id="cancelModal">Cancel</button>
+        <button class="btn primary" id="saveNote">Save</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ===== Snackbar. ===== -->
+  <div id="snackbar" class="snackbar">
+    <span id="snackMsg">Note added</span>
+    <span id="snackUndo" class="undo">UNDO</span>
+  </div>
+
+<script>
+  // Linked list (main).
+  class ListNode{
+    constructor(value){ this.value = value; this.next = null; }
+  }
+  class LinkedList{
+    constructor(){ this.head = null; this.tail = null; this.length = 0; }
+    append(value){ // O(1).
+      const node = new ListNode(value);
+      if(!this.head){ this.head=node; this.tail=node; }
+      else { this.tail.next=node; this.tail=node; }
+      this.length++; return node;
+    }
+    findById(id){ let p=this.head; while(p){ if(p.value.id===id) return p; p=p.next; } return null; }
+    updateById(id, patch){
+      const n = this.findById(id); if(!n) return false;
+      Object.assign(n.value, patch); return true;
+    }
+    removeById(id){ // O(n).
+      if(!this.head) return null;
+      if(this.head.value.id===id){
+        const out=this.head.value;
+        this.head=this.head.next; if(!this.head) this.tail=null;
+        this.length--; return out;
+      }
+      let prev=this.head, cur=this.head.next;
+      while(cur){
+        if(cur.value.id===id){
+          prev.next=cur.next; if(cur===this.tail) this.tail=prev;
+          this.length--; return cur.value;
+        }
+        prev=cur; cur=cur.next;
+      }
+      return null;
+    }
+    toArray(){ const arr=[]; let p=this.head; while(p){ arr.push(p.value); p=p.next; } return arr; }
+    static fromArray(arr){ const ll=new LinkedList(); arr.forEach(x=>ll.append(x)); return ll; }
+  }
+
+  // Stack (LIFO).
+  class Stack{
+    constructor(){ this.items=[]; }
+    push(x){ this.items.push(x); }
+    pop(){ return this.items.pop(); }
+    peek(){ return this.items[this.items.length-1]; }
+    size(){ return this.items.length; }
+  }
+
+  // Queue (FIFO).
+  class Queue{
+    constructor(){ this.items=[]; }
+    enqueue(x){ this.items.push(x); }
+    dequeue(){ return this.items.shift(); }
+    peek(){ return this.items[0]; }
+    size(){ return this.items.length; }
+    isEmpty(){ return this.items.length===0; }
+  }
+
+  const content = document.getElementById('content');
+  const searchInput = document.getElementById('searchInput');
+
+  const modalWrap = document.getElementById('modalWrap');
+  const noteTitle = document.getElementById('noteTitle');
+  const noteBody = document.getElementById('noteBody');
+
+  const snackbar = document.getElementById('snackbar');
+  const snackMsg = document.getElementById('snackMsg');
+  const snackUndo = document.getElementById('snackUndo');
+
+  const VIEWS = { NOTES:'notes', ARCHIVE:'archive', TRASH:'trash' };
+  let currentView = VIEWS.NOTES;
+
+  // For local storage to linked list 'to. Do not disregard.
+  const saved = JSON.parse(localStorage.getItem('notiva_notes_ll')||'[]');
+  let notesLL = LinkedList.fromArray(saved); // Linked List.
+  const undoStack = new Stack(); // LIFO.
+  const syncQueue = new Queue(); // FIFO.
+  const redoStack = new Stack(); // For redo operations
+
+  function persist(){
+    localStorage.setItem('notiva_notes_ll', JSON.stringify(notesLL.toArray()));
+  }
+
+  function uid(){ return crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2); }
+
+  // For UI.
+  function openModal(prefill={}, id=null){
+  noteTitle.value = prefill.title || '';
+  noteBody.value = prefill.body || '';
+  modalWrap.dataset.editingId = id || ''; // store id in modal
+  modalWrap.style.display='flex';
+  noteTitle.focus();
+}
+
+  function closeModal(){ modalWrap.style.display='none'; noteTitle.value=''; noteBody.value=''; }
+  function showSnackbar(message, undoAction=null){
+    snackMsg.textContent = message;
+    snackbar.style.display='flex';
+    let hideTimer = setTimeout(()=> snackbar.style.display='none', 3000);
+    snackUndo.onclick = null;
+    if(undoAction){
+      snackUndo.style.display='inline';
+      snackUndo.onclick = ()=>{
+        clearTimeout(hideTimer);
+        snackbar.style.display='none';
+        undoAction();
+      };
+    }else{
+      snackUndo.style.display='none';
+    }
+  }
+  function escapeHTML(s){ return (s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[m])); }
+
+// Render and actions.
+  function render(){
+    const query = (searchInput.value||'').trim().toLowerCase();
+    const all = notesLL.toArray();
+
+    const visible = all.filter(n=>{
+      if(currentView===VIEWS.NOTES && (n.archived || n.trashed)) return false;
+      if(currentView===VIEWS.ARCHIVE && (!n.archived || n.trashed)) return false;
+      if(currentView===VIEWS.TRASH && !n.trashed) return false;
+      if(!query) return true;
+      return (n.title+n.body).toLowerCase().includes(query);
+    });
+
+    if(visible.length===0){
+      content.innerHTML = `
+        <div class="empty">
+          <div>
+            <div class="light">💡</div>
+            <p>Notes written appears here.</p>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    visible.sort((a,b)=> (b.pinned?1:0)-(a.pinned?1:0) || b.updated - a.updated);
+
+    const cards = visible.map(note=>{
+      const actions = [];
+      if(currentView===VIEWS.NOTES){
+        actions.push(`<button class="icon-btn" data-action="pin" data-id="${note.id}" title="Pin">${note.pinned?'📌':'📍'}</button>`);
+        actions.push(`<button class="icon-btn" data-action="archive" data-id="${note.id}" title="Archive">📦</button>`);
+        actions.push(`<button class="icon-btn" data-action="trash" data-id="${note.id}" title="Delete">🗑️</button>`);
+      }else if(currentView===VIEWS.ARCHIVE){
+        actions.push(`<button class="icon-btn" data-action="unarchive" data-id="${note.id}" title="Unarchive">↩️</button>`);
+        actions.push(`<button class="icon-btn" data-action="trash" data-id="${note.id}" title="Delete">🗑️</button>`);
+      }else{
+        actions.push(`<button class="icon-btn" data-action="restore" data-id="${note.id}" title="Restore">↩️</button>`);
+        actions.push(`<button class="icon-btn" data-action="delete" data-id="${note.id}" title="Delete forever">❌</button>`);
+      }
+
+      return `
+        <div class="card ${note.pinned?'pinned':''}" data-id="${note.id}">
+          <div class="actions">${actions.join('')}</div>
+          <h4>${escapeHTML(note.title || 'Untitled')}</h4>
+          <p>${escapeHTML(note.body || '')}</p>
+        </div>
+      `;
+    }).join('');
+
+    content.innerHTML = `<div class="grid">${cards}</div>`;
+  }
+
+  function addNote(title, body){
+    const note = { id:uid(), title:title.trim(), body:body.trim(), pinned:false, archived:false, trashed:false, updated:Date.now() };
+    notesLL.append(note); // Linked List.
+    persist(); render();
+    undoStack.push({type:'add', id:note.id}); // LIFO.
+    showSnackbar('Note added', ()=>{
+      notesLL.removeById(note.id); persist(); render();
+    });
+    queueSync({op:'add', id:note.id}); // FIFO.
+  }
+
+  function togglePin(id){
+    const node = notesLL.findById(id); if(!node) return;
+    const prev = {...node.value};
+    notesLL.updateById(id, { pinned:!node.value.pinned, updated:Date.now() });
+    persist(); render();
+    undoStack.push({type:'patch', id, snapshot:prev});
+    queueSync({op:'patch', id});
+  }
+
+  function archiveNote(id){
+    const node=notesLL.findById(id); if(!node) return;
+    const prev={...node.value};
+    notesLL.updateById(id,{ archived:true, trashed:false, updated:Date.now() });
+    persist(); render();
+    showSnackbar('Note archived', ()=>{ notesLL.updateById(id, prev); persist(); render(); });
+    queueSync({op:'archive', id});
+  }
+  function unarchiveNote(id){
+    const node=notesLL.findById(id); if(!node) return;
+    const prev={...node.value};
+    notesLL.updateById(id,{ archived:false, updated:Date.now() });
+    persist(); render();
+    showSnackbar('Note unarchived', ()=>{ notesLL.updateById(id, prev); persist(); render(); });
+    queueSync({op:'unarchive', id});
+  }
+  function moveToTrash(id){
+    const node=notesLL.findById(id); if(!node) return;
+    const prev={...node.value};
+    notesLL.updateById(id,{ trashed:true, archived:false, updated:Date.now() });
+    persist(); render();
+    showSnackbar('Moved to trash', ()=>{ notesLL.updateById(id, prev); persist(); render(); });
+    queueSync({op:'trash', id});
+  }
+  function restoreFromTrash(id){
+    const node=notesLL.findById(id); if(!node) return;
+    const prev={...node.value};
+    notesLL.updateById(id,{ trashed:false, updated:Date.now() });
+    persist(); render();
+    showSnackbar('Restored', ()=>{ notesLL.updateById(id, prev); persist(); render(); });
+    queueSync({op:'restore', id});
+  }
+  function deleteForever(id){
+    const removed = notesLL.removeById(id);
+    if(!removed) return;
+    persist(); render();
+    showSnackbar('Deleted forever', ()=>{ notesLL.append(removed); persist(); render(); });
+    queueSync({op:'delete', id});
+  }
+
+  function queueSync(job){
+    syncQueue.enqueue({ ...job, ts:Date.now() });
+  }
+  let syncing=false;
+  async function processSync(){
+    if(syncing) return;
+    syncing=true;
+    while(!syncQueue.isEmpty()){
+      const job = syncQueue.dequeue(); // FIFO.
+      showSnackbar(`Syncing: ${job.op}…`);
+      await new Promise(r=>setTimeout(r, 250));
+    }
+    showSnackbar('Sync complete.');
+    syncing=false;
+  }
+ 
+  document.querySelectorAll('.nav-btn[data-view]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentView = btn.getAttribute('data-view');
+      render();
+    });
+  })
+  // New note.
+  document.getElementById('newNoteBtn').addEventListener('click', ()=> openModal());
+  // Controls of modal.
+  document.getElementById('closeModal').addEventListener('click', closeModal);
+  document.getElementById('cancelModal').addEventListener('click', closeModal);
+  document.getElementById('saveNote').addEventListener('click', ()=>{
+  if(!noteTitle.value.trim() && !noteBody.value.trim()){ closeModal(); return; }
+
+  const editingId = modalWrap.dataset.editingId;
+  if(editingId){ 
+    // ---- EDIT EXISTING NOTE ----
+    const node = notesLL.findById(editingId);
+    if(node){
+      const prev = {...node.value}; // snapshot before change
+      notesLL.updateById(editingId, {
+        title: noteTitle.value.trim(),
+        body: noteBody.value.trim(),
+        updated: Date.now()
+      });
+      persist(); render();
+      undoStack.push({type:'patch', id:editingId, snapshot:prev});
+      redoStack.items = []; // clear redo history after new change
+      queueSync({op:'edit', id:editingId});
+    }
+  } else {
+    // ---- NEW NOTE ----
+    addNote(noteTitle.value, noteBody.value);
+  }
+
+  closeModal();
+});
+
+  modalWrap.addEventListener('click', (e)=>{ if(e.target===modalWrap) closeModal(); });
+
+  content.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button.icon-btn'); if(!btn) return;
+    const id = btn.getAttribute('data-id'); const action = btn.getAttribute('data-action');
+    if(action==='pin') togglePin(id);
+    if(action==='archive') archiveNote(id);
+    if(action==='unarchive') unarchiveNote(id);
+    if(action==='trash') moveToTrash(id);
+    if(action==='restore') restoreFromTrash(id);
+    if(action==='delete') deleteForever(id);
+  });
+
+  content.addEventListener('dblclick', (e)=>{
+  const card = e.target.closest('.card'); 
+  if(!card) return;
+  const id = card.getAttribute('data-id');
+  const node = notesLL.findById(id);
+  if(node){
+    openModal(node.value, id);
+  }
+});
+
+  // Search.
+  searchInput.addEventListener('input', render);
+
+  // Sync.
+  document.getElementById('syncBtn').addEventListener('click', processSync);
+
+  (function(){
+    const themeToggle = document.getElementById('themeToggle');
+    const themeLabel = document.getElementById('themeLabel');
+
+    function setTheme(t){
+      document.body.setAttribute('data-theme', t);
+      themeLabel.textContent = t==='dark' ? 'Light' : 'Dark';
+    }
+
+    const initial = document.body.getAttribute('data-theme') || 'light';
+    setTheme(initial);
+
+    themeToggle.addEventListener('click', ()=>{
+      const cur = document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+  })();
+
+  document.getElementById('burgerBtn').addEventListener('click', ()=>{
+    const sb = document.getElementById('sidebar');
+    const visible = getComputedStyle(sb).display !== 'none';
+    if(visible){ sb.style.display='none'; document.getElementById('appShell').style.gridTemplateColumns='1fr'; }
+    else{ sb.style.display='block'; document.getElementById('appShell').style.gridTemplateColumns='260px 1fr'; }
+  });
+
+  document.addEventListener('keydown', (e)=>{
+  if(e.ctrlKey && e.key.toLowerCase()==='z'){ // Undo
+    const action = undoStack.pop();
+    if(action){
+      const node = notesLL.findById(action.id);
+      if(node){
+        redoStack.push({type:'patch', id:action.id, snapshot:{...node.value}});
+        notesLL.updateById(action.id, action.snapshot);
+        persist(); render();
+        showSnackbar('Undo edit');
+      }
+    }
+  }
+  if(e.ctrlKey && e.key.toLowerCase()==='y'){ // Redo
+    const action = redoStack.pop();
+    if(action){
+      const node = notesLL.findById(action.id);
+      if(node){
+        undoStack.push({type:'patch', id:action.id, snapshot:{...node.value}});
+        notesLL.updateById(action.id, action.snapshot);
+        persist(); render();
+        showSnackbar('Redo edit');
+      }
+    }
+  }
+});
+
+  
+  // For DS checking lang ito.
+  window.__notivaDS = { LinkedList, Stack, Queue };
+
+  render();
+</script>
+</body>
+</html>
